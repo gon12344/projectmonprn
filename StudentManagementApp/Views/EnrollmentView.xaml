@@ -1,0 +1,52 @@
+<UserControl x:Class="WpfApp1.Views.EnrollmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Width="300" Visibility="{Binding IsAdminUi, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Search student"/>
+                <DockPanel>
+                    <TextBox Width="200" Margin="0,0,10,0" Text="{Binding SearchStudentText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="Search" Command="{Binding SearchStudentsCommand}" Width="70"/>
+                </DockPanel>
+                <ListBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" DisplayMemberPath="FullName" Height="200"/>
+            </StackPanel>
+            <StackPanel Width="300" Margin="20,0,0,0">
+                <TextBlock Text="Search course"/>
+                <DockPanel>
+                    <TextBox Width="200" Margin="0,0,10,0" Text="{Binding SearchCourseText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="Search" Command="{Binding SearchCoursesCommand}" Width="70"/>
+                </DockPanel>
+                <ListBox ItemsSource="{Binding Courses}" SelectedItem="{Binding SelectedCourse}" DisplayMemberPath="CourseName" Height="200"/>
+            </StackPanel>
+            <StackPanel Margin="20,0,0,0" VerticalAlignment="Center">
+                <Button Content="Enroll / Request" Command="{Binding EnrollCommand}" Width="140" Height="40"/>
+                <Button Content="Approve (Admin)" Command="{Binding ApproveCommand}" Width="140" Height="32" Margin="0,10,0,0"
+                    Visibility="{Binding IsAdminUi, Converter={StaticResource BoolToVis}}"/>
+                <Button Content="Reject (Admin)" Command="{Binding RejectCommand}" Width="140" Height="32" Margin="0,6,0,0"
+                    Visibility="{Binding IsAdminUi, Converter={StaticResource BoolToVis}}"/>
+                <Button Content="Drop (select row)" Command="{Binding DropCommand}" Width="180" Height="32" Margin="0,10,0,0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Enrollments}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Student" Binding="{Binding Student.FullName}" Width="2*"/>
+                <DataGridTextColumn Header="Course Code" Binding="{Binding Course.CourseCode}" Width="*"/>
+                <DataGridTextColumn Header="Course Name" Binding="{Binding Course.CourseName}" Width="2*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                <DataGridTextColumn Header="Enrolled At" Binding="{Binding EnrollmentDate}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
