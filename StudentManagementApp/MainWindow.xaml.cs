@@ -27,6 +27,11 @@ namespace WpfApp1
                 {
                     CoursesTab.Visibility = Visibility.Collapsed;
                 }
+                // Hide GradesTab for non-admin users
+                if (GradesTab != null)
+                {
+                    GradesTab.Visibility = Visibility.Collapsed;
+                }
             }
         }
     }

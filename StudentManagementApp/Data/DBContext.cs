@@ -26,7 +26,7 @@ namespace WpfApp1.Data
                 entity.ToTable("Student");
                 entity.HasKey(e => e.StudentId);
                 entity.Property(e => e.StudentCode).IsRequired().HasMaxLength(255).HasColumnName("StudentCode");
-                entity.Property(e => e.FullName).IsRequired().HasMaxLength(255).HasColumnName("StudentName");
+                entity.Property(e => e.FullName).IsRequired().HasMaxLength(255).HasColumnName("FullName");
                 entity.Property(e => e.Gender).HasMaxLength(10).HasColumnName("Gender");
                 entity.Property(e => e.Address).HasMaxLength(255).HasColumnName("StudentAddress");
                 entity.Property(e => e.DateOfBirth).HasColumnName("DOB");
@@ -52,6 +52,11 @@ namespace WpfApp1.Data
                 entity.HasKey(e => e.EnrollmentId);
                 entity.Property(e => e.Status).HasMaxLength(20);
                 entity.Property(e => e.Notes).HasMaxLength(200);
+
+                // *** NEW MAPPING FOR GRADE ***
+                entity.Property(e => e.Grade).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.GradedDate);
+                // *** END NEW MAPPING ***
 
                 entity.HasOne(d => d.Student)
                     .WithMany(p => p.Enrollments)

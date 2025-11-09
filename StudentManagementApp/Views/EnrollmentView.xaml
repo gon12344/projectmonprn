@@ -41,10 +41,14 @@
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding Enrollments}" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Student" Binding="{Binding Student.FullName}" Width="2*"/>
+                <DataGridTextColumn Header="Student" Binding="{Binding Student.FullName}" Width="2*" Visibility="{Binding DataContext.IsAdminUi, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVis}}" />
                 <DataGridTextColumn Header="Course Code" Binding="{Binding Course.CourseCode}" Width="*"/>
                 <DataGridTextColumn Header="Course Name" Binding="{Binding Course.CourseName}" Width="2*"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                <!-- *** NEW GRADE COLUMNS *** -->
+                <DataGridTextColumn Header="Grade" Binding="{Binding Grade}" Width="*" />
+                <DataGridTextColumn Header="Graded Date" Binding="{Binding GradedDate, StringFormat={}{0:yyyy-MM-dd}}" Width="*" />
+                <!-- *** END NEW GRADE COLUMNS *** -->
                 <DataGridTextColumn Header="Enrolled At" Binding="{Binding EnrollmentDate}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>

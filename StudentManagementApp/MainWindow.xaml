@@ -15,6 +15,9 @@
             <TabItem x:Name="EnrollmentsTab" Header="Enrollments">
                 <views:EnrollmentView />
             </TabItem>
+            <TabItem x:Name="GradesTab" Header="Grades">
+                <views:GradeManagementView />
+            </TabItem>
             <TabItem Header="Profile">
                 <views:ProfileView />
             </TabItem>

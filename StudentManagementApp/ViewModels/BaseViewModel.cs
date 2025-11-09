@@ -9,5 +9,8 @@ namespace WpfApp1.ViewModels
 
         [ObservableProperty]
         private string _title = string.Empty;
+
+        // Convenience read-only property for bindings
+        public bool IsNotBusy => !IsBusy;
     }
 }
