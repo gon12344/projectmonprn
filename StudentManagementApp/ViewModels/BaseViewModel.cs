@@ -12,5 +12,11 @@ namespace WpfApp1.ViewModels
 
         // Convenience read-only property for bindings
         public bool IsNotBusy => !IsBusy;
+
+        // Notify dependent property IsNotBusy when IsBusy changes
+        partial void OnIsBusyChanged(bool value)
+        {
+            OnPropertyChanged(nameof(IsNotBusy));
+        }
     }
 }
