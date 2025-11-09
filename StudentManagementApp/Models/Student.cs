@@ -17,22 +17,24 @@ namespace WpfApp1.Models
         [StringLength(100)]
         public string FullName { get; set; } = string.Empty;
         
+        [Required]
         [StringLength(100)]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         
+        [Required]
         [StringLength(15)]
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
         
         [Required]
         public DateTime DateOfBirth { get; set; }
         
+        [Required]
         [StringLength(10)]
-        public string? Gender { get; set; }
+        public string Gender { get; set; } = string.Empty;
         
+        [Required]
         [StringLength(200)]
-        public string? Address { get; set; }
-        
-        // Class removed from this scope
+        public string Address { get; set; } = string.Empty;
         
         // Navigation properties
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();

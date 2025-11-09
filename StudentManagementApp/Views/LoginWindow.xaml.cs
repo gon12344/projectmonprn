@@ -27,16 +27,17 @@ namespace WpfApp1.Views
                     return;
                 }
 
-                var ok = await _authService.LoginAsync(Username, password);
-                if (!ok)
+                var loginSuccess = await _authService.LoginAsync(Username, password);
+                if (!loginSuccess)
                 {
-                    MessageBox.Show("Invalid credentials or inactive account.", "Login failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Invalid credentials or inactive account.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                // set current user globally
+                // Set current user globally
                 App.CurrentUser = _authService.CurrentUser;
 
+                // Navigate based on role
                 if (string.Equals(App.CurrentUser?.Role?.Name, "Admin", System.StringComparison.OrdinalIgnoreCase))
                 {
                     var main = new MainWindow();
@@ -47,6 +48,7 @@ namespace WpfApp1.Views
                     var studentWin = new StudentWindow();
                     studentWin.Show();
                 }
+
                 Close();
             }
             catch (System.Exception ex)

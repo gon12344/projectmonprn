@@ -1,0 +1,124 @@
+<UserControl x:Class="WpfApp1.Views.StudentManagementView"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d">
+    
+    <Grid Margin="10">
+ <Grid.RowDefinitions>
+       <RowDefinition Height="Auto"/>
+   <RowDefinition Height="Auto"/>
+    <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+   </Grid.RowDefinitions>
+    
+  <!-- CRUD Buttons -->
+      <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+ <Button Content="+ Add" Command="{Binding AddStudentAsyncCommand}" 
+    Width="100" Height="35" Margin="0,0,10,0" Background="LightGreen"/>
+    <Button Content="* Edit" Command="{Binding EditStudentAsyncCommand}" 
+ Width="100" Height="35" Margin="0,0,10,0" Background="LightBlue"/>
+  <Button Content="- Delete" Command="{Binding DeleteStudentCommand}" 
+   Width="100" Height="35" Margin="0,0,10,0" Background="LightCoral"/>
+    <Button Content="^ Refresh" Command="{Binding RefreshCommand}" 
+    Width="100" Height="35" Margin="0,0,10,0" Background="LightYellow"/>
+ </StackPanel>
+
+        <!-- Search Box -->
+ <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+  <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+      <TextBox Width="300" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+  VerticalAlignment="Center" Margin="0,0,10,0" Height="30" 
+  BorderThickness="2" BorderBrush="SteelBlue"/>
+   <Button Content="Search" Command="{Binding SearchCommand}" Width="70" Height="30" 
+Background="SteelBlue" Foreground="White"/>
+  </StackPanel>
+
+  <!-- Input Form -->
+<Border Grid.Row="2" Background="Honeydew" Padding="15" Margin="0,0,0,15" 
+   CornerRadius="5" BorderBrush="Green" BorderThickness="2">
+  <Grid>
+ <Grid.RowDefinitions>
+       <RowDefinition Height="Auto"/>
+       <RowDefinition Height="Auto"/>
+  <RowDefinition Height="Auto"/>
+   </Grid.RowDefinitions>
+     <Grid.ColumnDefinitions>
+ <ColumnDefinition Width="Auto"/>
+<ColumnDefinition Width="200"/>
+       <ColumnDefinition Width="Auto"/>
+     <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+       </Grid.ColumnDefinitions>
+
+   <!-- Row 1 -->
+  <TextBlock Grid.Row="0" Grid.Column="0" Text="Student ID:" VerticalAlignment="Center" 
+  Margin="0,0,10,8" FontWeight="SemiBold"/>
+   <TextBox Grid.Row="0" Grid.Column="1" Height="28" 
+    Margin="0,0,15,8" ToolTip="Enter student ID"
+        Text="{Binding InputStudentCode, UpdateSourceTrigger=PropertyChanged}"/>
+
+  <TextBlock Grid.Row="0" Grid.Column="2" Text="Full Name:" VerticalAlignment="Center" 
+   Margin="0,0,10,8" FontWeight="SemiBold"/>
+ <TextBox Grid.Row="0" Grid.Column="3" Height="28" 
+    Margin="0,0,15,8" ToolTip="Enter full name"
+    Text="{Binding InputFullName, UpdateSourceTrigger=PropertyChanged}"/>
+
+  <TextBlock Grid.Row="0" Grid.Column="4" Text="Email:" VerticalAlignment="Center" 
+      Margin="0,0,10,8" FontWeight="SemiBold"/>
+ <TextBox Grid.Row="0" Grid.Column="5" Height="28" 
+      Margin="0,0,10,8" ToolTip="Enter email address"
+     Text="{Binding InputEmail, UpdateSourceTrigger=PropertyChanged}"/>
+
+      <!-- Row 2 -->
+  <TextBlock Grid.Row="1" Grid.Column="0" Text="Date of Birth:" VerticalAlignment="Center" 
+  Margin="0,0,10,8" FontWeight="SemiBold"/>
+   <DatePicker Grid.Row="1" Grid.Column="1" Height="28" 
+ Margin="0,0,15,8" ToolTip="Select date of birth"
+        SelectedDate="{Binding InputDateOfBirth, Mode=TwoWay}"/>
+
+    <TextBlock Grid.Row="1" Grid.Column="2" Text="Gender:" VerticalAlignment="Center" 
+          Margin="0,0,10,8" FontWeight="SemiBold"/>
+<ComboBox Grid.Row="1" Grid.Column="3" Height="28" 
+Margin="0,0,15,8" SelectedValue="{Binding InputGender, Mode=TwoWay}">
+  <ComboBoxItem Content="Male"/>
+<ComboBoxItem Content="Female"/>
+    <ComboBoxItem Content="Other"/>
+  </ComboBox>
+
+  <TextBlock Grid.Row="1" Grid.Column="4" Text="Phone:" VerticalAlignment="Center" 
+       Margin="0,0,10,8" FontWeight="SemiBold"/>
+<TextBox Grid.Row="1" Grid.Column="5" Height="28" 
+     Margin="0,0,10,8" ToolTip="Enter phone number"
+   Text="{Binding InputPhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Row 3 -->
+ <TextBlock Grid.Row="2" Grid.Column="0" Text="Address:" VerticalAlignment="Center" 
+    Margin="0,0,10,8" FontWeight="SemiBold"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Height="28" 
+Margin="0,0,10,8" ToolTip="Enter address"
+      Text="{Binding InputAddress, UpdateSourceTrigger=PropertyChanged}"/>
+</Grid>
+</Border>
+ 
+  <!-- Student DataGrid -->
+<DataGrid Grid.Row="3" ItemsSource="{Binding FilteredStudents}" SelectedItem="{Binding SelectedStudent}"
+    AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+      GridLinesVisibility="Horizontal" RowHeaderWidth="0" 
+        AlternatingRowBackground="LightGray" SelectionMode="Single"
+        SelectionChanged="DataGrid_SelectionChanged">
+    <DataGrid.Columns>
+  <DataGridTextColumn Header="Student ID" Binding="{Binding StudentCode}" Width="100" 
+       FontWeight="Bold"/>
+ <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="200"/>
+  <DataGridTextColumn Header="Date of Birth" Binding="{Binding DateOfBirth, StringFormat=dd/MM/yyyy}" Width="120"/>
+    <DataGridTextColumn Header="Gender" Binding="{Binding Gender}" Width="80"/>
+    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="250"/>
+     <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+   <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="120"/>
+   </DataGrid.Columns>
+     </DataGrid>
+    </Grid>
+</UserControl>

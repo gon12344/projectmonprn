@@ -1,0 +1,20 @@
+<Window x:Class="WpfApp1.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:WpfApp1.Views"
+   Title="He thong quan ly sinh vien" Height="700" Width="1200" WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+      <TabControl>
+ <TabItem Header="Quan ly sinh vien">
+  <views:StudentManagementView />
+        </TabItem>
+    <TabItem Header="Quan ly lop hoc">
+        <views:CourseManagementView />
+ </TabItem>
+        <TabItem Header="Dang ky lop hoc">
+     <views:EnrollmentView />
+      </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

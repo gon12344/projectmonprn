@@ -37,6 +37,18 @@ namespace WpfApp1.ViewModels
         [ObservableProperty]
         private bool _isAdminUi;
 
+        [ObservableProperty]
+        private Enrollment? _selectedEnrollment;
+
+        [ObservableProperty]
+        private DateTime _enrollmentDate = DateTime.Now;
+
+        [ObservableProperty]
+        private string _enrollmentStatus = "Pending";
+
+        [ObservableProperty]
+        private string _enrollmentNotes = string.Empty;
+
         public EnrollmentViewModel(DBContext context)
         {
             _context = context;
@@ -64,7 +76,7 @@ namespace WpfApp1.ViewModels
                 if (stu != null)
                 {
                     SelectedStudent = stu;
-                    await LoadEnrollmentsForStudent(studentId);
+                    await LoadEnrollmentsForStudentInternal(studentId);
                 }
             }
             catch { }
@@ -84,7 +96,7 @@ namespace WpfApp1.ViewModels
 
                 if (SelectedStudent != null)
                 {
-                    await LoadEnrollmentsForStudent(SelectedStudent.StudentId);
+                    await LoadEnrollmentsForStudentInternal(SelectedStudent.StudentId);
                 }
                 else
                 {
@@ -101,7 +113,7 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        private async Task LoadEnrollmentsForStudent(int studentId)
+        private async Task LoadEnrollmentsForStudentInternal(int studentId)
         {
             var list = await _context.Enrollments
                 .Include(e => e.Course)
@@ -109,6 +121,11 @@ namespace WpfApp1.ViewModels
                 .Where(e => e.StudentId == studentId)
                 .ToListAsync();
             Enrollments = new ObservableCollection<Enrollment>(list);
+        }
+
+        public async Task LoadEnrollmentsForStudent(int studentId)
+        {
+            await LoadEnrollmentsForStudentInternal(studentId);
         }
 
         [RelayCommand]
@@ -137,7 +154,7 @@ namespace WpfApp1.ViewModels
 
             _context.Enrollments.Add(enrollment);
             await _context.SaveChangesAsync();
-            await LoadEnrollmentsForStudent(SelectedStudent.StudentId);
+            await LoadEnrollmentsForStudentInternal(SelectedStudent.StudentId);
             MessageBox.Show(_isAdmin ? "Enrolled successfully!" : "Request submitted and waiting for approval.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -159,7 +176,7 @@ namespace WpfApp1.ViewModels
 
             _context.Enrollments.Remove(selected);
             await _context.SaveChangesAsync();
-            await LoadEnrollmentsForStudent(SelectedStudent.StudentId);
+            await LoadEnrollmentsForStudentInternal(SelectedStudent.StudentId);
         }
 
         [RelayCommand]
@@ -178,7 +195,7 @@ namespace WpfApp1.ViewModels
             }
             selected.Status = "Active";
             await _context.SaveChangesAsync();
-            await LoadEnrollmentsForStudent(SelectedStudent!.StudentId);
+            await LoadEnrollmentsForStudentInternal(SelectedStudent!.StudentId);
         }
 
         [RelayCommand]
@@ -197,7 +214,7 @@ namespace WpfApp1.ViewModels
             }
             selected.Status = "Rejected";
             await _context.SaveChangesAsync();
-            await LoadEnrollmentsForStudent(SelectedStudent!.StudentId);
+            await LoadEnrollmentsForStudentInternal(SelectedStudent!.StudentId);
         }
 
         [RelayCommand]
@@ -242,7 +259,7 @@ namespace WpfApp1.ViewModels
         {
             if (value != null)
             {
-                LoadEnrollmentsForStudent(value.StudentId).ConfigureAwait(false);
+                LoadEnrollmentsForStudentInternal(value.StudentId).ConfigureAwait(false);
             }
         }
     }

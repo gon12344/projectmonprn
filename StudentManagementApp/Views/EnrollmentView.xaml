@@ -1,52 +1,176 @@
 <UserControl x:Class="WpfApp1.Views.EnrollmentView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d">
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-    </UserControl.Resources>
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    
     <Grid Margin="10">
         <Grid.RowDefinitions>
+  <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <StackPanel Width="300" Visibility="{Binding IsAdminUi, Converter={StaticResource BoolToVis}}">
-                <TextBlock Text="Search student"/>
-                <DockPanel>
-                    <TextBox Width="200" Margin="0,0,10,0" Text="{Binding SearchStudentText, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="Search" Command="{Binding SearchStudentsCommand}" Width="70"/>
-                </DockPanel>
-                <ListBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" DisplayMemberPath="FullName" Height="200"/>
-            </StackPanel>
-            <StackPanel Width="300" Margin="20,0,0,0">
-                <TextBlock Text="Search course"/>
-                <DockPanel>
-                    <TextBox Width="200" Margin="0,0,10,0" Text="{Binding SearchCourseText, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="Search" Command="{Binding SearchCoursesCommand}" Width="70"/>
-                </DockPanel>
-                <ListBox ItemsSource="{Binding Courses}" SelectedItem="{Binding SelectedCourse}" DisplayMemberPath="CourseName" Height="200"/>
-            </StackPanel>
-            <StackPanel Margin="20,0,0,0" VerticalAlignment="Center">
-                <Button Content="Enroll / Request" Command="{Binding EnrollCommand}" Width="140" Height="40"/>
-                <Button Content="Approve (Admin)" Command="{Binding ApproveCommand}" Width="140" Height="32" Margin="0,10,0,0"
-                    Visibility="{Binding IsAdminUi, Converter={StaticResource BoolToVis}}"/>
-                <Button Content="Reject (Admin)" Command="{Binding RejectCommand}" Width="140" Height="32" Margin="0,6,0,0"
-                    Visibility="{Binding IsAdminUi, Converter={StaticResource BoolToVis}}"/>
-                <Button Content="Drop (select row)" Command="{Binding DropCommand}" Width="180" Height="32" Margin="0,10,0,0"/>
-            </StackPanel>
-        </StackPanel>
+  <RowDefinition Height="Auto"/>
+       <RowDefinition Height="Auto"/>
+   <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    
+        <!-- Action Buttons -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+            <Button Content="+ Enroll" Command="{Binding EnrollCommand}" 
+          Width="120" Height="35" Margin="0,0,10,0" Background="LightGreen"/>
+       <Button Content="- Drop" Command="{Binding DropCommand}" 
+ Width="120" Height="35" Margin="0,0,10,0" Background="LightCoral"/>
+   <Button Content="* Approve" Command="{Binding ApproveCommand}" 
+                Width="120" Height="35" Margin="0,0,10,0" Background="LightBlue" 
+                Visibility="{Binding IsAdminUi, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Button Content="X Reject" Command="{Binding RejectCommand}" 
+      Width="120" Height="35" Margin="0,0,10,0" Background="Orange"
+         Visibility="{Binding IsAdminUi, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+          <Button Content="^ Refresh" Command="{Binding LoadDataCommand}" 
+           Width="120" Height="35" Background="LightYellow"/>
+   </StackPanel>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Enrollments}" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Student" Binding="{Binding Student.FullName}" Width="2*"/>
-                <DataGridTextColumn Header="Course Code" Binding="{Binding Course.CourseCode}" Width="*"/>
-                <DataGridTextColumn Header="Course Name" Binding="{Binding Course.CourseName}" Width="2*"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
-                <DataGridTextColumn Header="Enrolled At" Binding="{Binding EnrollmentDate}" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- Student Selection Row -->
+ <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+             <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="300"/>
+     <ColumnDefinition Width="Auto"/>
+  <ColumnDefinition Width="200"/>
+    <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+            
+     <TextBlock Grid.Column="0" Text="* Student:" VerticalAlignment="Center" 
+           Margin="0,0,10,0" FontWeight="Bold"/>
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}"
+     DisplayMemberPath="FullName" Height="30" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="2" Text="Search Student:" VerticalAlignment="Center" 
+ Margin="0,0,10,0"/>
+            <TextBox Grid.Column="3" Text="{Binding SearchStudentText, UpdateSourceTrigger=PropertyChanged}" 
+     Height="30" Margin="0,0,10,0" ToolTip="Enter student name or ID"/>
+  <Button Grid.Column="4" Content="Search" Command="{Binding SearchStudentsCommand}" 
+                Width="70" Height="30" HorizontalAlignment="Left"/>
+        </Grid>
+
+  <!-- Course Selection Row -->
+        <Grid Grid.Row="2" Margin="0,0,0,15">
+         <Grid.ColumnDefinitions>
+         <ColumnDefinition Width="Auto"/>
+<ColumnDefinition Width="300"/>
+        <ColumnDefinition Width="Auto"/>
+         <ColumnDefinition Width="200"/>
+    <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+    
+   <TextBlock Grid.Column="0" Text="* Course:" VerticalAlignment="Center" 
+                Margin="0,0,10,0" FontWeight="Bold"/>
+    <ComboBox Grid.Column="1" ItemsSource="{Binding Courses}" SelectedItem="{Binding SelectedCourse}"
+    DisplayMemberPath="CourseName" Height="30" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="2" Text="Search Course:" VerticalAlignment="Center" 
+    Margin="0,0,10,0"/>
+      <TextBox Grid.Column="3" Text="{Binding SearchCourseText, UpdateSourceTrigger=PropertyChanged}" 
+       Height="30" Margin="0,0,10,0" ToolTip="Enter course name or ID"/>
+            <Button Grid.Column="4" Content="Search" Command="{Binding SearchCoursesCommand}" 
+           Width="70" Height="30" HorizontalAlignment="Left"/>
+  </Grid>
+
+  <!-- Enrollment Details Form -->
+ <Expander Grid.Row="3" Header="Enrollment Details" Margin="0,0,0,15" 
+      Background="LightBlue" IsExpanded="True">
+<Border Background="AliceBlue" Padding="15" CornerRadius="5" BorderBrush="SteelBlue" BorderThickness="1">
+     <Grid>
+      <Grid.RowDefinitions>
+   <RowDefinition Height="Auto"/>
+ <RowDefinition Height="Auto"/>
+   <RowDefinition Height="Auto"/>
+  <RowDefinition Height="Auto"/>
+     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+     <ColumnDefinition Width="Auto"/>
+       <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="Auto"/>
+    <ColumnDefinition Width="200"/>
+<ColumnDefinition Width="Auto"/>
+     <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+ <!-- Row 1: Student ID, Full Name -->
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="Student ID:" VerticalAlignment="Center" 
+       Margin="0,0,10,8" FontWeight="SemiBold"/>
+    <TextBox Grid.Row="0" Grid.Column="1" x:Name="StudentCodeBox" Height="28" 
+  Margin="0,0,15,8" ToolTip="Student ID" IsReadOnly="True"
+  Text="{Binding SelectedStudent.StudentCode, Mode=OneWay}"/>
+      
+         <TextBlock Grid.Row="0" Grid.Column="2" Text="Student Name:" VerticalAlignment="Center" 
+      Margin="0,0,10,8" FontWeight="SemiBold"/>
+   <TextBox Grid.Row="0" Grid.Column="3" x:Name="StudentNameBox" Height="28" 
+    Margin="0,0,15,8" ToolTip="Student name" IsReadOnly="True"
+         Text="{Binding SelectedStudent.FullName, Mode=OneWay}"/>
+
+    <!-- Row 2: Course Code, Course Name -->
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="Course Code:" VerticalAlignment="Center" 
+   Margin="0,0,10,8" FontWeight="SemiBold"/>
+     <TextBox Grid.Row="1" Grid.Column="1" x:Name="CourseCodeBox" Height="28" 
+Margin="0,0,15,8" ToolTip="Course code" IsReadOnly="True"
+      Text="{Binding SelectedCourse.CourseCode, Mode=OneWay}"/>
+    
+    <TextBlock Grid.Row="1" Grid.Column="2" Text="Course Name:" VerticalAlignment="Center" 
+         Margin="0,0,10,8" FontWeight="SemiBold"/>
+      <TextBox Grid.Row="1" Grid.Column="3" x:Name="CourseNameBox" Height="28" 
+      Margin="0,0,15,8" ToolTip="Course name" IsReadOnly="True"
+ Text="{Binding SelectedCourse.CourseName, Mode=OneWay}"/>
+
+   <!-- Row 3: Enrollment Date, Status -->
+         <TextBlock Grid.Row="2" Grid.Column="0" Text="Enrollment Date:" VerticalAlignment="Center" 
+  Margin="0,0,10,8" FontWeight="SemiBold"/>
+ <DatePicker Grid.Row="2" Grid.Column="1" x:Name="EnrollmentDatePicker" Height="28" 
+     Margin="0,0,15,8" ToolTip="Select enrollment date"/>
+          
+ <TextBlock Grid.Row="2" Grid.Column="2" Text="Status:" VerticalAlignment="Center" 
+    Margin="0,0,10,8" FontWeight="SemiBold"/>
+  <ComboBox Grid.Row="2" Grid.Column="3" x:Name="StatusComboBox" Height="28" 
+  Margin="0,0,15,8" SelectedIndex="0">
+      <ComboBoxItem Content="Pending"/>
+    <ComboBoxItem Content="Active"/>
+    <ComboBoxItem Content="Rejected"/>
+          <ComboBoxItem Content="Dropped"/>
+ </ComboBox>
+
+    <!-- Row 4: Notes -->
+ <TextBlock Grid.Row="3" Grid.Column="0" Text="Notes:" VerticalAlignment="Top" 
+     Margin="0,5,10,8" FontWeight="SemiBold"/>
+   <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" x:Name="NotesBox" 
+     Height="50" Margin="0,0,15,8" TextWrapping="Wrap" AcceptsReturn="True"
+  ToolTip="Enter notes for this enrollment"/>
+    
+   <!-- Action Buttons -->
+    <StackPanel Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Orientation="Horizontal" 
+       VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,8">
+    <Button Content="Save Info" Width="120" Height="28" Margin="5,0" 
+   Click="SaveEnrollmentDetails_Click" Background="LightGreen" 
+  ToolTip="Save enrollment details"/>
+      <Button Content="Clear" Width="80" Height="28" Margin="5,0" 
+     Click="ClearForm_Click" Background="LightCoral"
+      ToolTip="Clear all input"/>
+  </StackPanel>
+     </Grid>
+    </Border>
+        </Expander>
+  
+        <!-- Enrollment DataGrid -->
+   <DataGrid Grid.Row="4" ItemsSource="{Binding Enrollments}" SelectedItem="{Binding SelectedEnrollment}"
+        AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+   GridLinesVisibility="Horizontal" RowHeaderWidth="0" 
+  AlternatingRowBackground="LightGray" SelectionMode="Single">
+       <DataGrid.Columns>
+    <DataGridTextColumn Header="Student" Binding="{Binding Student.FullName}" Width="200"/>
+ <DataGridTextColumn Header="Student ID" Binding="{Binding Student.StudentCode}" Width="100"/>
+<DataGridTextColumn Header="Course" Binding="{Binding Course.CourseName}" Width="200"/>
+    <DataGridTextColumn Header="Course Code" Binding="{Binding Course.CourseCode}" Width="100"/>
+   <DataGridTextColumn Header="Enrollment Date" Binding="{Binding EnrollmentDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+   <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+  <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="200"/>
+   </DataGrid.Columns>
+  </DataGrid>
     </Grid>
 </UserControl>

@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:WpfApp1"
              StartupUri="Views/LoginWindow.xaml">
     <Application.Resources>
-         
+        <!-- Converters -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Application.Resources>
 </Application>
